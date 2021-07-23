@@ -1,0 +1,63 @@
+buildscript {
+    ext {
+        lombokVersion = '1.18.6'
+    }
+}
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+    id 'jacoco'
+    id 'org.sonarqube' version '2.7'
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
+    id 'com.github.ManifestClasspath' version '0.1.0-RELEASE'
+}
+
+apply plugin: 'application'
+mainClassName= 'br.com.lojasrenner.rlog.transport.order.Application'
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "rlog-transport-order"
+    }
+}
+archivesBaseName = 'service'
+repositories {
+    mavenCentral()
+    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+    maven { url 'http://nexus-01-eval-oms.eastus.cloudapp.azure.com:8081/repository/renner/' }
+    //maven { url 'http://127.0.0.1:8081/repository/renner/' }
+}
+apply from: "dependencies.gradle"
+sourceCompatibility = 11
+targetCompatibility = 11
+jacoco {
+    toolVersion = "0.8.3"
+}
+test.finalizedBy project.tasks.jacocoTestReport
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/coverage_report")
+    }
+}
+dependencyManagement {
+    imports { 
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE'
+    }
+}
+sonarqube {
+    properties{
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.projectName" , "${project.name}"
+        property "sonar.tests", "$buildDir/classes/java/test"
+        property "sonar.dynamicAnalysis" , "true"
+        property 'sonar.coverage.exclusions', "**/exception/**,**/mapping/**,**/model/**," +
+                "**/infrastructure/**,**/Application.java,**/orderlib/**," +
+                "**/Constants.java,**/*Test*/**," +
+                "**/metrics/**," +
+                "**/configuration/**,"
+    }
+}

@@ -1,0 +1,35 @@
+server:
+  undertow:
+    io-threads: 1000
+  tomcat:
+    max-threads: 1000
+spring:
+  application:
+    name: rlog-transport-order-service
+  cloud:
+    config:
+      uri: ${SPRING_CONFIG_URI:http://13.68.202.114/oms/config-server}
+      username: omsuser
+      password: Sup3rS3cr3tPassword0
+      timeout: 1
+      server:
+        health:
+          enabled: false
+app:
+  build:
+    version: v1
+    domain: rlog
+    
+renner:
+  library:
+    rabbit:
+      disable: true
+      
+---
+spring:
+  profiles: local
+  cloud:
+    config:
+      uri: 
+      username: 
+      password: 

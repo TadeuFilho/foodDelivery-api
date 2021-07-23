@@ -1,0 +1,89 @@
+id:
+    providerName: admin
+    apiName: RLOG-TRANSPORT-ORDER-API
+    version: 1.0.0
+    id: 0
+uuid: 3c1c4f82-a203-40a2-88b2-73857fae3942
+type: HTTP
+context: /supplyChainLogistics/transportationManagement/rlog/transportOrder/1.0.0
+contextTemplate: /supplyChainLogistics/transportationManagement/rlog/transportOrder/{​​​version}​​​
+tags: []
+documents: []
+lastUpdated: May 14, 2021, 4:46:27 PM
+availableTiers:
+    -
+        name: Unlimited
+        displayName: Unlimited
+        description: Allows unlimited requests
+        requestsPerMin: 2147483647
+        requestCount: 2147483647
+        unitTime: 0
+        timeUnit: ms
+        tierPlan: FREE
+        stopOnQuotaReached: true
+availableSubscriptionLevelPolicies: []
+uriTemplates: []
+apiHeaderChanged: false
+apiResourcePatternsChanged: false
+status: PUBLISHED
+visibility: public
+gatewayLabels: []
+endpointSecured: false
+endpointAuthDigest: false
+transports: http,https
+advertiseOnly: false
+apiOwner: admin
+subscriptionAvailability: current_tenant
+corsConfiguration:
+    corsConfigurationEnabled: true
+    accessControlAllowOrigins:
+        - '*'
+    accessControlAllowCredentials: false
+    accessControlAllowHeaders:
+        - authorization
+        - Access-Control-Allow-Origin
+        - Content-Type
+        - SOAPAction
+        - X-Application-Name
+        - X-Current-Date
+        - Cache-Control
+        - X-Cache-Control
+        - apikey
+        - x-authorization
+        - X-Company-Id
+        - X-Application-Id
+        - X-Seller-Id
+    accessControlAllowMethods:
+        - GET
+        - PUT
+        - POST
+        - DELETE
+        - PATCH
+        - OPTIONS
+endpointConfig: '{​​​"endpoint_type":"http","sandbox_endpoints":{​​​"template_not_supported":false,"url":"http:\/\/rlog-transport-order-service.rlog.svc.cluster.local:8080"}​​​,"failOver":"False","production_endpoints":{​​​"template_not_supported":false,"url":"http:\/\/rlog-transport-order-service.rlog.svc.cluster.local:8080"}​​​
+responseCache: Disabled
+cacheTimeout: 300
+implementation: ENDPOINT
+authorizationHeader: Authorization
+scopes: []
+isDefaultVersion: false
+isPublishedDefaultVersion: false
+keyManagers:
+    - all
+environments:
+    - Production and Sandbox
+createdTime: "1621010779000"
+additionalProperties: {}
+monetizationProperties: {}
+isMonetizationEnabled: false
+environmentList:
+    - SANDBOX
+    - PRODUCTION
+apiSecurity: oauth2,oauth_basic_auth_api_key_mandatory,api_key
+endpoints: []
+enableSchemaValidation: false
+apiCategories: []
+enableStore: true
+accessControl: all
+rating: 0.0
+isLatest: true

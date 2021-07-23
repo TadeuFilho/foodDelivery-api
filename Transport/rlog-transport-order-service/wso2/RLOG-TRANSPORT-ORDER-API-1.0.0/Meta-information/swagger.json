@@ -1,0 +1,1751 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Omni Broker - Draft da API de Modais de Entrega para carrinho de compras",
+    "version": "1.0.0",
+    "title": "Omni Broker - Delivery Methods",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "douglas.silva@lojasrenner.com.br"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "bfl.lojasrenner.com.br",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/v1/companies/{companyId}/broker/schedule/{cartId}/{deliveryModeId}/details": {
+      "get": {
+        "tags": [
+          "Schedule"
+        ],
+        "summary": "Retorna informações de agendamento de uma oferta de entrega.",
+        "description": "",
+        "operationId": "deliveryScheduleDetailsOptions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-Application-Name",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Nome aplicação que está chamando a API"
+          },
+          {
+            "name": "X-Current-Date",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Data corrente do sistema de origem (YYYY-MM-DDTHH:mm:SSZ)"
+          },
+          {
+            "name": "X-Locale",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "pt_BR",
+            "description": "Linguagem e moeda que serão utilizados nos retornos (Referência: http://www.localeplanet.com/icu/pt-BR/index.html)"
+          },
+          {
+            "name": "companyId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Id da empresa"
+          },
+          {
+            "name": "cartId",
+            "type": "string",
+            "in": "path",
+            "description": "Identificador da oferta de modais (retornado por /cart/query DeliveryOptionsReturn.id)",
+            "required": true
+          },
+          {
+            "name": "deliveryModeId",
+            "type": "string",
+            "in": "path",
+            "description": "Identificador da oferta de modais (retornado por /cart/query DeliveryMode.id)",
+            "required": true
+          },
+          {
+            "name": "quantity",
+            "in": "query",
+            "type": "string",
+            "default": 15,
+            "description": "Inserir o número de datas disponíveis para agendamento ou manter em branco para receber a quantidade configurada para o método na Intelipost."
+          },
+          {
+            "name": "from_today",
+            "in": "query",
+            "type": "string",
+            "default": 15,
+            "description": "Inserir os dias úteis, a partir de hoje, que devem ser considerados como base no cálculo ou manter em branco para utilizar a data de hoje."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso.",
+            "schema": {
+              "$ref": "#/definitions/ScheduleDetailsReturn"
+            }
+          },
+          "404": {
+            "description": "Identificador da oferta de modal inexistente ou expirou."
+          },
+          "500": {
+            "description": "Erro interno."
+          },
+          "504": {
+            "description": "Intelipost indisponível no momento, cotações não podem ser executadas."
+          }
+        }
+      }
+    },
+    "/v1/companies/{companyId}/broker/delivery/cart/query/{id}/pickup/options": {
+      "get": {
+        "tags": [
+          "Pickup"
+        ],
+        "summary": "Lista de destinos na modalidade retire disponíveis e seus prazos.",
+        "description": "",
+        "operationId": "deliveryPickupOptions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-Application-Name",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Nome aplicação que está chamando a API"
+          },
+          {
+            "name": "X-Current-Date",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Data corrente do sistema de origem (YYYY-MM-DDTHH:mm:SSZ)"
+          },
+          {
+            "name": "X-Locale",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "pt_BR",
+            "description": "Linguagem e moeda que serão utilizados nos retornos (Referência: http://www.localeplanet.com/icu/pt-BR/index.html)"
+          },
+          {
+            "name": "companyId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Id da empresa"
+          },
+          {
+            "name": "id",
+            "type": "string",
+            "in": "path",
+            "description": "Identificador da oferta de modais (retornado por /cart/query)",
+            "required": true
+          },
+          {
+            "name": "skus",
+            "in": "query",
+            "type": "string",
+            "description": "SKUs separados por virgula, Ex: ?skus=535037299,541018529",
+            "required": true
+          },
+          {
+            "name": "blockedBranches",
+            "in": "query",
+            "type": "string",
+            "description": "Branches separadas por virgula, Ex: ?blockedBranches=35,49"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "type": "string",
+            "description": "Estado onde se deseja listar as opções de retire (não é necessário informar caso seja o mesmo estado utilizado para o /cart/query."
+          },
+          {
+            "name": "zipcode",
+            "in": "query",
+            "type": "string",
+            "description": "CEP que será utilizado como ponto de referência para calcular próximidade das opções de retire."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso.",
+            "schema": {
+              "$ref": "#/definitions/PickupOptionsReturn"
+            }
+          },
+          "404": {
+            "description": "Identificador da oferta de modal inexistente ou expirou."
+          },
+          "500": {
+            "description": "Erro interno."
+          },
+          "504": {
+            "description": "Intelipost indisponível no momento, cotações não podem ser executadas."
+          }
+        }
+      }
+    },
+    "/v1/companies/{companyId}/broker/delivery/cart/query": {
+      "post": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Consulta modais de entrega de um carrinho",
+        "description": "",
+        "operationId": "develiryModesQueryForShoppingCart",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-Application-Name",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Nome aplicação que está chamando a API"
+          },
+          {
+            "name": "X-Current-Date",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Data corrente do sistema de origem (YYYY-MM-DDTHH:mm:SSZ)"
+          },
+          {
+            "name": "X-Locale",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "pt_BR",
+            "description": "Linguagem e moeda que serão utilizados nos retornos (Referência: http://www.localeplanet.com/icu/pt-BR/index.html)"
+          },
+          {
+            "name": "X-Max-Origins",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "description": "Quantidade máxima de origens para a quebra de estoque"
+          },
+          {
+            "name": "X-Max-Origins-Store",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "description": "Quantidade máxima de origens de lojas para a quebra de estoque"
+          },
+          {
+            "name": "X-Branches-For-Shipping-Strategy",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Enum informando se é GEOLOCATION ou ZIPCODE_RANGE",
+            "enum": [
+              "GEOLOCATION",
+              "ZIPCODE_RANGE"
+            ]
+          },
+          {
+            "name": "X-Eager-Branches",
+            "in": "header",
+            "required": false,
+            "type": "array",
+            "description": "Lista de Eager Branches.",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Combinations-Timeout",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "description": "Timeout de combinações de grupos"
+          },
+          {
+            "name": "X-Combination-Approach-Cart-Size-Limit",
+            "in": "header",
+            "required": false,
+            "type": "integer",
+            "description": "Número limite de quantidade de items que o carrinho pode utilizar para combinações"
+          },
+          {
+            "name": "companyId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Id da empresa"
+          },
+          {
+            "name": "blockedBranches",
+            "in": "query",
+            "type": "array",
+            "required": false,
+            "description": "Bloqueio de branch para a nova cotação, Informado em formato array de string as branches que estão bloqueadas.",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "verbose",
+            "in": "query",
+            "type": "string",
+            "default": false,
+            "description": "Quando true irá retornar todas as possíveis cotações e não apenas as recomendações do broker."
+          },
+          {
+            "name": "logisticInfo",
+            "in": "query",
+            "type": "string",
+            "default": false,
+            "description": "Quando true irá retornar informações especificas da transportadora vindas da intelipost para modais onde o fulfillment method é CD."
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Objeto com os dados para consulta de modais de entrega.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ShoppingCart"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso.",
+            "schema": {
+              "$ref": "#/definitions/DeliveryOptionsReturn"
+            }
+          },
+          "500": {
+            "description": "Erro interno."
+          },
+          "504": {
+            "description": "Intelipost indisponível no momento, cotações não podem ser executadas."
+          }
+        }
+      }
+    },
+    "/v1/companies/{companyId}/broker/delivery/cart/query/{id}": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Retorna uma cotação pelo seu id",
+        "description": "",
+        "operationId": "GetdeveliryModesQueryById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-Application-Name",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Nome aplicação que está chamando a API"
+          },
+          {
+            "name": "X-Current-Date",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Data corrente do sistema de origem (YYYY-MM-DDTHH:mm:SSZ)"
+          },
+          {
+            "name": "X-Locale",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "pt_BR",
+            "description": "Linguagem e moeda que serão utilizados nos retornos (Referência: http://www.localeplanet.com/icu/pt-BR/index.html)"
+          },
+          {
+            "name": "companyId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Id da empresa"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "Identificador da oferta de modais (retornado por /cart/query).",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso.",
+            "schema": {
+              "$ref": "#/definitions/DeliveryOptionsReturn"
+            }
+          },
+          "404": {
+            "description": "Identificador da oferta de modal inexistente ou expirou."
+          },
+          "500": {
+            "description": "Erro interno."
+          },
+          "504": {
+            "description": "Intelipost indisponível no momento, cotações não podem ser executadas."
+          }
+        }
+      }
+    },
+    "/v1/companies/{companyId}/broker/delivery/cart/fulfillment": {
+      "post": {
+        "tags": [
+          "Fulfillment"
+        ],
+        "summary": "Retorna as origens de estoque ideais para os itens de um carrinho",
+        "description": "",
+        "operationId": "develiryFulfillmentForShoppingCart",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "X-Application-Name",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Nome aplicação que está chamando a API"
+          },
+          {
+            "name": "X-Current-Date",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Data corrente do sistema de origem (YYYY-MM-DDTHH:mm:SSZ)"
+          },
+          {
+            "name": "X-Locale",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "pt_BR",
+            "description": "Linguagem e moeda que serão utilizados nos retornos (Referência: http://www.localeplanet.com/icu/pt-BR/index.html)"
+          },
+          {
+            "name": "companyId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Id da empresa"
+          },
+          {
+            "name": "blockedBranches",
+            "in": "query",
+            "type": "array",
+            "required": false,
+            "description": "Bloqueia a branches que não deve fazer uma nova cotação quando indisponivel os SKU's.",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Objeto com os dados do carrinho.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CartOrder"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso.",
+            "schema": {
+              "$ref": "#/definitions/CartOrderResult"
+            }
+          },
+          "500": {
+            "description": "Erro interno."
+          },
+          "504": {
+            "description": "Intelipost indisponível no momento, cotações não podem ser executadas."
+          }
+        }
+      }
+    },
+    "/v1/helper/enum/{name}": {
+      "get": {
+        "tags": [
+          "Helper"
+        ],
+        "summary": "Lista os valores possíveis para o enum solicitado",
+        "description": "",
+        "operationId": "listEnumValues",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Enum que deve ter os valores listados"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de valores do enum"
+          },
+          "400": {
+            "description": "Enum não encontrado ou não é um enum"
+          }
+        }
+      }
+    },
+    "/v1/companies/{companyId}/broker/liveConfig": {
+      "post": {
+        "tags": [
+          "LiveConfig"
+        ],
+        "summary": "Salva e Atualiza os dados de configurações do LiveConfig",
+        "description": "",
+        "operationId": "postLiveConfig",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Token de autorização para utilização deste end-point"
+          },
+          {
+            "name": "companyId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Id da empresa"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Objeto com os dados que deve ser passado para criar a configuração",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LiveConfigRequestV1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully saved or updated",
+            "schema": {
+              "$ref": "#/definitions/LiveConfigResponseV1"
+            }
+          },
+          "400": {
+            "description": "company configuration cannot be null"
+          },
+          "401": {
+            "description": "Unauthorized access token"
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "LiveConfig"
+        ],
+        "summary": "Resgata os dados de configurações salvo na collection LiveConfig",
+        "description": "",
+        "operationId": "getLiveConfig",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Token de autorização para utilização deste end-point"
+          },
+          {
+            "name": "companyId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "Id da empresa"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response entity when successfully rescued the object.",
+            "schema": {
+              "$ref": "#/definitions/LiveConfigEntity"
+            }
+          },
+          "400": {
+            "description": "company configuration cannot be null"
+          },
+          "401": {
+            "description": "Unauthorized access token"
+          },
+          "404": {
+            "description": "Configuration not found. Please register the configuration to consult"
+          },
+          "500": {
+            "description": "Erro interno."
+          }
+        }
+      }
+    },
+    "/v1/audit/external-code": {
+      "get": {
+        "tags": [
+          "Audit"
+        ],
+        "summary": "Listagem de cotações com esse External Code",
+        "description": "",
+        "operationId": "findIdsByExternalCode",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "externalCode",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "description": "ID Externo que deve ser buscado",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de IDs de cotações"
+          },
+          "404": {
+            "description": "Nenhum item correspondente a busca"
+          }
+        }
+      }
+    },
+    "/v1/audit/quote/{id}": {
+      "get": {
+        "tags": [
+          "Audit"
+        ],
+        "summary": "Detalhe de uma cotação específica",
+        "description": "",
+        "operationId": "findByQuoteId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID da cotação",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da cotação"
+          },
+          "404": {
+            "description": "Nenhum item correspondente a busca"
+          }
+        }
+      }
+    },
+    "/v1/audit/quote/{id}/pickups": {
+      "get": {
+        "tags": [
+          "Audit"
+        ],
+        "summary": "Listagem de pickups relacionados à cotação",
+        "description": "",
+        "operationId": "findPickupsForQuote",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID da cotação",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listagem de pickups"
+          },
+          "404": {
+            "description": "Nenhum item correspondente a busca"
+          }
+        }
+      }
+    },
+    "/v1/audit/quote/{id}/schedules": {
+      "get": {
+        "tags": [
+          "Audit"
+        ],
+        "summary": "Listagem de schedules relacionados à cotação",
+        "description": "",
+        "operationId": "findSchedulesForQuote",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID da cotação",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listagem de schedules"
+          },
+          "404": {
+            "description": "Nenhum item correspondente a busca"
+          }
+        }
+      }
+    },
+    "/v1/audit/quote/{id}/fulfills": {
+      "get": {
+        "tags": [
+          "Audit"
+        ],
+        "summary": "Listagem de fulfillments relacionados à cotação",
+        "description": "",
+        "operationId": "findFulfillsForQuote",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID da cotação",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listagem de fulfillments"
+          },
+          "404": {
+            "description": "Nenhum item correspondente a busca"
+          }
+        }
+      }
+    },
+    "/v1/audit/fulfill/{id}": {
+      "get": {
+        "tags": [
+          "Audit"
+        ],
+        "summary": "Detalhe de um fulfillment específico",
+        "description": "",
+        "operationId": "findByFulfillId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID da cotação",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes de fulfillment"
+          },
+          "404": {
+            "description": "Nenhum item correspondente a busca"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LiveConfigRequestV1": {
+      "type": "object",
+      "description": "Informações que deve ser enviado na request",
+      "properties": {
+        "business": {
+          "$ref": "#/definitions/CompanyConfigEntity"
+        }
+      }
+    },
+    "LiveConfigResponseV1": {
+      "type": "object",
+      "description": "Informações que será devolvida após consumir o end-point",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Mensagem do que foi executado"
+        },
+        "config": {
+          "$ref": "#/definitions/LiveConfigRequestV1"
+        }
+      }
+    },
+    "LiveConfigEntity": {
+      "type": "object",
+      "description": "Entidade onde que é salvo os dados de configuração do LiveConfig",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id da company que esta configuração está cadastrada."
+        },
+        "business": {
+          "$ref": "#/definitions/CompanyConfigEntity"
+        }
+      }
+    },
+    "CompanyConfigEntity": {
+      "type": "object",
+      "properties": {
+        "maxOrigins": {
+          "type": "integer",
+          "description": "Maxímo de Origens de quebras"
+        },
+        "maxOriginsStore": {
+          "type": "integer",
+          "description": "Maxímo de Origens de quebras nas lojas"
+        },
+        "spEcommActive": {
+          "type": "boolean",
+          "description": "Ecomm de São Paulo Ativo? [True = Sim, False = Não]",
+          "default": null
+        },
+        "branchSorting": {
+          "type": "string",
+          "description": "Branch Sorting [COUNT, COST]",
+          "enum": [
+            "COUNT",
+            "COST"
+          ]
+        },
+        "unavailableSkusStrategy": {
+          "type": "string",
+          "description": "Estratégia de skus não avaliados [UNAVAILABLE_MODE, RETRY_MODE]",
+          "enum": [
+            "UNAVAILABLE_MODE",
+            "RETRY_MODE"
+          ]
+        },
+        "allowFulfillWithMaxCapacityAchieved": {
+          "type": "boolean",
+          "description": "Define se irá permitir lojas com a capacidade maxima atingida na hora do fulfillment.",
+          "default": null
+        },
+        "branchesForShippingStrategy": {
+          "type": "string",
+          "description": "Define o tipo de estratégia que o /query irá utilizar, se é range de zipcode ou geolocation.",
+          "enum": [
+            "GEOLOCATION",
+            "ZIPCODE_RANGE"
+          ]
+        },
+        "eagerBranches": {
+          "type": "array",
+          "description": "Define as lojas que tem prioridades.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "combinationApproachCartSizeLimit": {
+          "type": "integer",
+          "description": "Define o limite do tamanho do carrinho antes de utilizar o metodo focado em quantidade de sku's em vez da de combinations."
+        },
+        "channelConfig": {
+          "type": "object",
+          "description": "Configurações do canal - [Key = Nome do Canal]",
+          "properties": {
+            "key": {
+              "$ref": "#/definitions/CompanyConfigEntity"
+            }
+          }
+        },
+        "ecomms": {
+          "type": "array",
+          "description": "Array de Branch Office Entity",
+          "items": {
+            "$ref": "#/definitions/BranchOfficeEntity"
+          }
+        },
+        "cd2": {
+          "type": "string",
+          "description": "Define qual será o CD2 para a Renner-Brazil.",
+          "example": "001900"
+        },
+        "dataLakeSendDataRate": {
+          "type": "number",
+          "description": "Envio do DataLake",
+          "example": "1.0"
+        },
+        "country": {
+          "type": "string",
+          "description": "Define qual sera a sigla do pais para a company.",
+          "example": "BR"
+        },
+        "pickup": {
+          "type": "object",
+          "description": "É o node com todas as configurações que afetam o pickup.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/PickupConfig"
+            }
+          ]
+        },
+        "fulfillment": {
+          "type": "object",
+          "description": "É o node com todas as configurações que afetam o fulfillment.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/FulfillmentConfig"
+            }
+          ]
+        },
+        "reOrder": {
+          "type": "object",
+          "description": "É o node com todar as configurações de repedido",
+          "allOf": [
+            {
+              "$ref": "#/definitions/ReOrderConfig"
+            }
+          ]
+        },
+        "shippingTo": {
+          "type": "object",
+          "description": "Objeto que contem informações do Shipping To",
+          "properties": {
+            "key": {
+              "$ref": "#/definitions/ShippingToConfig"
+            }
+          }
+        },
+        "validBranchOfficeStatus": {
+          "type": "array",
+          "description": "Status das branches aceitos no momento que é feito o pickup",
+          "items": {
+            "type": "string"
+          }
+        },
+        "freightCostCurrency": {
+          "type": "string",
+          "description": "Tipo de moeda utilizada no broker"
+        },
+        "defaultQuotingMode": {
+          "type": "string",
+          "description": "Tipo de cotação que é enviada para o InteliPost"
+        },
+        "timeout": {
+          "type": "object",
+          "description": "Objeto que contem o tempo de expiração de execução do sistema",
+          "properties": {
+            "key": {
+              "$ref": "#/definitions/TimeoutConfig"
+            }
+          }
+        }
+      }
+    },
+    "PickupConfig": {
+      "type": "object",
+      "properties": {
+        "avoidFulfillmentTypeMixingForCD": {
+          "type": "boolean",
+          "description": "É uma flag que seta se deve aceitar estoque do loja no pickup em um partOrder de CD",
+          "example": true
+        }
+      }
+    },
+    "FulfillmentConfig": {
+      "type": "object",
+      "properties": {
+        "extraBranchStatusStrategy": {
+          "type": "string",
+          "description": "É um enum que define se será permitido status extra na checagem de lojas ativas para o Fulfillment e no Query",
+          "enum": [
+            "NONE",
+            "SAME_ORIGIN",
+            "REQUOTE_ORIGIN",
+            "EVERY_ORIGIN"
+          ],
+          "example": "SAME_ORIGIN"
+        },
+        "validBranchOfficeStatus": {
+          "type": "array",
+          "description": "Lista de Branches Offices com Status Válido",
+          "items": {
+            "type": "string"
+          }
+        },
+        "autoReQuote": {
+          "type": "boolean",
+          "description": "Ativa as Recotações automáticas quando não localizado um fulfillment"
+        }
+      }
+    },
+    "ReOrderConfig": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean",
+          "description": "É uma flag que seta se será permitido realizar repedido na hora do fulfillment ou não.",
+          "example": true
+        }
+      }
+    },
+    "BranchOfficeEntity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Código da Loja"
+        },
+        "zipcode": {
+          "type": "string",
+          "description": "CEP da Loja"
+        }
+      }
+    },
+    "ShippingToConfig": {
+      "type": "object",
+      "properties": {
+        "pickupActive": {
+          "type": "boolean",
+          "description": "Ativar o Shipping To para o Pickup",
+          "default": false
+        },
+        "reQuoteActive": {
+          "type": "boolean",
+          "description": "Ativar o Shipping To para a Recotação no Fulfillment",
+          "default": false
+        },
+        "addOperationalTimeOnEstimate": {
+          "type": "boolean",
+          "description": "Adicionar tempo estimado para a operação do Shipping To",
+          "default": false
+        }
+      }
+    },
+    "TimeoutConfig": {
+      "type": "object",
+      "properties": {
+        "threads": {
+          "type": "integer",
+          "description": "Tempo de expiração de execução das threads"
+        },
+        "combinations": {
+          "type": "integer",
+          "description": "Tempo de expiração da execução das combinações do broker"
+        }
+      }
+    },
+    "ShoppingCart": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CartItem"
+          }
+        },
+        "containsRestrictedOriginItems": {
+          "type": "boolean",
+          "default": false,
+          "description": "Carrinho contém itens de origem de estoque exclusiva. (Ex: cartão presente, brinde, pré-venda, etc)."
+        },
+        "destination": {
+          "$ref": "#/definitions/CartDestination"
+        },
+        "extraIdentification": {
+          "$ref": "#/definitions/ExtraIdentification"
+        }
+      }
+    },
+    "ItemFreightProperties": {
+      "type": "object",
+      "properties": {
+        "costOfGoods": {
+          "type": "number",
+          "description": "Preço unitário do produto.",
+          "example": "39.90"
+        },
+        "productCategory": {
+          "type": "string",
+          "description": "Categoria do produto.",
+          "example": "Roupas"
+        },
+        "weight": {
+          "type": "number",
+          "description": "Peso da caixa em quilogramas.",
+          "example": "0.003"
+        },
+        "width": {
+          "type": "number",
+          "description": "Largura do volume em centímetros.",
+          "default": "1",
+          "example": "1"
+        },
+        "height": {
+          "type": "number",
+          "description": "Altura do volume em centímetros.",
+          "default": "1",
+          "example": "1"
+        },
+        "length": {
+          "type": "number",
+          "description": "Comprimento do volume.",
+          "default": "1",
+          "example": "1"
+        },
+        "canGroup": {
+          "type": "boolean",
+          "default": true,
+          "description": "Produto é agrupável?"
+        }
+      },
+      "required": [
+        "costOfGoods",
+        "productCategory",
+        "weight"
+      ]
+    },
+    "CartItem": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ItemFreightProperties"
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string",
+          "description": "SKU do item",
+          "example": "548951354"
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Quantidade do item",
+          "example": "2"
+        },
+        "branchOfficeId": {
+          "type": "integer",
+          "description": "Id da branch (loja/locker/etc) onde será retirado (Só deve ser preenchido caso seja uma modalidade de PICKUP).",
+          "default": "0"
+        },
+        "stockStatus": {
+          "type": "string",
+          "description": "Indica o status do stock do item - opções disponivel [INSTOCK, INOMNISTOCK, PREORDERABLE, BACKORDERABLE].",
+          "default": null,
+          "enum": [
+            "INSTOCK",
+            "INOMNISTOCK",
+            "PREORDERABLE",
+            "BACKORDERABLE"
+          ]
+        },
+        "productType": {
+          "type": "string",
+          "description": "Indica o tipo do produto - opções disponivel [DEFAULT, GIFT, KIT].",
+          "default": "DEFAULT",
+          "enum": [
+            "DEFAULT",
+            "GIFT",
+            "KIT"
+          ]
+        }
+      },
+      "required": [
+        "sku",
+        "quantity"
+      ]
+    },
+    "CartDestination": {
+      "type": "object",
+      "properties": {
+        "zipcode": {
+          "type": "string",
+          "description": "Cep do endereço de destino da entrega.",
+          "example": "90100-000"
+        }
+      },
+      "required": [
+        "zipcode"
+      ]
+    },
+    "ExtraIdentification": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "pageName": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "extOrderCode": {
+          "type": "string"
+        }
+      }
+    },
+    "PickupOptionsReturn": {
+      "type": "object",
+      "properties": {
+        "pickupOptions": {
+          "type": "array",
+          "description": "Lista de lojas e prazos para retire em loja.",
+          "items": {
+            "$ref": "#/definitions/PickupOption"
+          }
+        }
+      }
+    },
+    "PickupOption": {
+      "type": "object",
+      "properties": {
+        "deliveryModeId": {
+          "type": "string",
+          "description": "Identificador desta oferta de modal, este será o identificador que o canal deverá informar ao BFL para escolher a modal de entrega para o item.",
+          "example": "STORE-PICKUP-19-0"
+        },
+        "branchId": {
+          "type": "string",
+          "description": "Id da branch.",
+          "example": "170"
+        },
+        "name": {
+          "type": "string",
+          "description": "Nome da loja",
+          "example": "Loja Otávio Rocha"
+        },
+        "branchType": {
+          "type": "string",
+          "description": "Tipo do branch (loja, locker, etc).",
+          "enum": [
+            "STORE",
+            "EXTERNAL_LOCKER"
+          ]
+        },
+        "fulfillmentMethod": {
+          "type": "string",
+          "description": "Tipo de fulfillment (loja, cd, cd2, ...).",
+          "example": "STORE",
+          "enum": [
+            "STORE",
+            "CD",
+            "CD2"
+          ]
+        },
+        "distance": {
+          "type": "number",
+          "description": "Distância do cep informado em metros (quando o cep não for informado será 0).",
+          "example": 0.7
+        },
+        "deliveryTime": {
+          "type": "string",
+          "description": "Tempo estimado para a retirada.",
+          "example": "1"
+        },
+        "deliveryEstimateBusinessDays": {
+          "type": "integer",
+          "description": "Tempo estimado para a entrega.",
+          "example": "3"
+        },
+        "deliveryTimeUnit": {
+          "type": "string",
+          "description": "Unidade do tempo de medida de retirada.",
+          "example": "DAY",
+          "enum": [
+            "MINUTE",
+            "HOUR",
+            "DAY",
+            "WEEK"
+          ]
+        },
+        "stockType": {
+          "type": "string",
+          "description": "Enum que diz a origem do estoque",
+          "example": "CD",
+          "enum": [
+            "OWN_STOCK,",
+            "SHIPPING_TO,",
+            "CD"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "description": "Estado da origem do estoque que está atendendo o partOrder",
+          "example": "SP"
+        }
+      }
+    },
+    "DeliveryOptionsReturn": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identificador destas ofertas de modais.",
+          "example": "129038-12381293-1238123"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Data e hora em que a consulta foi processada."
+        },
+        "distinctOrigins": {
+          "type": "number",
+          "description": "Número de origens de estoque distintas utilizadas na cotação."
+        },
+        "originPreview": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OriginPreview"
+          },
+          "description": "Prévia da quebra de itens por origem."
+        },
+        "deliveryOptions": {
+          "type": "array",
+          "description": "Lista de opções de entrega",
+          "items": {
+            "$ref": "#/definitions/DeliveryOption"
+          }
+        }
+      }
+    },
+    "DeliveryOption": {
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string",
+          "description": "SKU do item"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Quantidade do item"
+        },
+        "deliveryModes": {
+          "type": "array",
+          "description": "Modais de enterga disponíveis para o item",
+          "items": {
+            "$ref": "#/definitions/DeliveryMode"
+          }
+        }
+      }
+    },
+    "OriginPreview": {
+      "type": "object",
+      "properties": {
+        "branchId": {
+          "type": "string",
+          "example": "899",
+          "description": "Id de umas das branch que está sendo utilizada."
+        },
+        "skus": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "548860081"
+          },
+          "description": "skus que pertencem a está branch."
+        }
+      }
+    },
+    "DeliveryMode": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identificador desta oferta de modal, este será o identificador que o canal deverá informar ao BFL para escolher a modal de entrega para o item.",
+          "example": "129038-12381293-1238123"
+        },
+        "modalId": {
+          "type": "string",
+          "description": "Identificador único do tipo de modal (ex: entrega expressa saindo de loja, entrega expressa saindo de CD, etc).",
+          "example": "123456"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Descrição amigável da modal (exibir no frontend).",
+          "example": "Entrega Normal"
+        },
+        "isRecommendation": {
+          "type": "boolean",
+          "description": "Flag que identifica se esta modal é uma recomendação do broker para que sejam exibidos pelos canais de venda.",
+          "example": "true"
+        },
+        "estimatedDeliveryTimeValue": {
+          "type": "string",
+          "description": "Prazo estimado de entrega valor (exibir no frontend)",
+          "example": "2"
+        },
+        "estimatedDeliveryTimeUnit": {
+          "type": "string",
+          "description": "Prazo estimado de entrega unidade (exibir no frontend)",
+          "example": "DAY",
+          "enum": [
+            "MINUTE",
+            "HOUR",
+            "DAY",
+            "WEEK",
+            "MONTH",
+            "YEAR"
+          ]
+        },
+        "estimatedDeliveryDate": {
+          "type": "string",
+          "description": "Data estimada da entrega (sistemico).",
+          "example": "2019-12-09T16:44:46+00:00"
+        },
+        "shippingMethod": {
+          "type": "string",
+          "description": "Tipo de shipping (retira em loja, normal, expressa, agendada, same day, etc).",
+          "example": "STANDARD",
+          "enum": [
+            "STANDARD",
+            "EXPRESS",
+            "SCHEDULED",
+            "PICKUP"
+          ]
+        },
+        "fulfillmentMethod": {
+          "type": "string",
+          "description": "Tipo de fulfillment (loja, cd, cd2, ...).",
+          "example": "STORE",
+          "enum": [
+            "STORE",
+            "CD",
+            "CD2"
+          ]
+        },
+        "freightCost": {
+          "type": "number",
+          "description": "Custo do frete",
+          "example": "8.99"
+        },
+        "state": {
+          "type": "string",
+          "description": "O estado da origem dos sku's",
+          "example": "SP"
+        },
+        "freightCostCurrency": {
+          "type": "string",
+          "description": "Moeda utilizada no frete",
+          "example": "R$"
+        },
+        "description": {
+          "type": "string",
+          "description": "Descrição utilizada para campos de ajuda ou mais informações (frontend).",
+          "example": "A entrega expressa é realizada em até 6 horas úteis após a aprovação de pagamento."
+        }
+      }
+    },
+    "CartOrder": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identificador da oferta de modais. (retornado por /cart/query propriedade DeliveryOptionsReturn.id) ",
+          "example": "129038-12381293-1238123"
+        },
+        "items": {
+          "type": "array",
+          "description": "Lista de skus e quantidades que compoem o no carrinho",
+          "items": {
+            "$ref": "#/definitions/CartItemWithMode"
+          }
+        },
+        "destination": {
+          "$ref": "#/definitions/CartDestination"
+        }
+      }
+    },
+    "CartItemWithMode": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/CartItem"
+        }
+      ],
+      "properties": {
+        "modalId": {
+          "type": "string",
+          "description": "Id único modal de entrega desejada para o sku/quantidade, atentar que deve ser utilizado o campo modalId e não o id retornado pela consulta de modais para carrinho (DeliveryMode.id) .",
+          "example": "552213038-12381293-1238123"
+        }
+      },
+      "required": [
+        "modalId",
+        "sku"
+      ]
+    },
+    "CartOrderResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identificador desta decisão de fulfillment, este será o identificador.",
+          "example": "129038-12381293-1238123"
+        },
+        "fulfillmentConditionsHasChanged": {
+          "type": "boolean",
+          "description": "As condições de fulfillment sofreram mudança.",
+          "default": false
+        },
+        "fulfillmentInfo": {
+          "$ref": "#/definitions/DeliveryGroup"
+        },
+        "originType": {
+          "type": "string",
+          "description": "Tipo de origem",
+          "enum": [
+            "OK_SAME_ORIGIN",
+            "OK_NEW_ORIGIN",
+            "PARTIAL_SAME_ORIGIN",
+            "PARTIAL_NEW_ORIGIN",
+            "NO_ORIGIN"
+          ]
+        }
+      }
+    },
+    "ItemFulfillment": {
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string",
+          "description": "SKU do item",
+          "example": "548951354"
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Quantidade do item",
+          "example": "2"
+        }
+      }
+    },
+    "DeliveryGroupFulfillment": {
+      "type": "object",
+      "properties": {
+        "extQuotationId": {
+          "type": "string",
+          "description": "Id da cotação retornado pelo sistema de cotação e frete (Ex: Intelipost). Será nulo quando não for necessário transporte via uma transportadora (Pickup In Store quando o estoque é originado na mesma loja)."
+        },
+        "extDeliveryMethodId": {
+          "type": "string",
+          "description": "Id da modal de entrega retornado pelo sistema de cotação e frete (Ex: Intelipost). Será nulo quando não for necessário transporte via uma transportadora (Pickup In Store quando o estoque é originado na mesma loja)."
+        },
+        "extProvider": {
+          "type": "string",
+          "description": "Logistic provider name",
+          "example": "Loggi Express Cross Dock"
+        },
+        "extDescription": {
+          "type": "string",
+          "description": "Logistic provider description name",
+          "example": "Loggi"
+        },
+        "estimatedDeliveryTimeValue": {
+          "type": "string",
+          "description": "Tempo de entrega estimado em dias úteis",
+          "example": "5"
+        },
+        "estimatedDeliveryTimeUnit": {
+          "type": "string",
+          "description": "Que tipo de unidade de tempo o campo estimatedDeliveryTimeValue está utilizando",
+          "example": "DAY"
+        },
+        "estimatedDeliveryDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Tempo estimado no formato de data para a entrega ser realizada",
+          "example": "2021-02-08"
+        },
+        "extDeliveryMethodType": {
+          "type": "string",
+          "description": "Logistic provider delivery method type",
+          "example": "EXPRESS"
+        },
+        "originBranchId": {
+          "type": "string",
+          "description": "Branch (loja, cd, hub, etc) de qual estoque o item deverá ser atendido e realizado o fulfillment (picking, packing) deste item nesta quantidade.",
+          "example": "170"
+        },
+        "fulfillmentMethod": {
+          "type": "string",
+          "description": "Tipo de fulfillment (loja, cd, cd2, ...).",
+          "example": "STORE",
+          "enum": [
+            "STORE",
+            "CD",
+            "CD2"
+          ]
+        },
+        "freightCost": {
+          "type": "number",
+          "description": "Custo monetário para a realização da entrega",
+          "example": 19.72
+        },
+        "freightCostCurrency": {
+          "type": "string",
+          "description": "Tipo de moeda utilizada no freightCost",
+          "example": "R$"
+        },
+        "unavailable": {
+          "type": "boolean",
+          "description": "Se o Item está ou não está disponível para o atendimento com as opções informadas",
+          "example": true
+        },
+        "stockType": {
+          "type": "string",
+          "description": "Tipo de stock no pickup (estoque próprio, cd ou shipping-to, ...).",
+          "example": "SHIPPING_TO",
+          "enum": [
+            "SHIPPING_TO",
+            "OWN_STOCK",
+            "CD"
+          ]
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/ItemFulfillment"
+          }
+        }
+      }
+    },
+    "DeliveryGroup": {
+      "type": "object",
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeliveryGroupFulfillment"
+          }
+        }
+      }
+    },
+    "ScheduleDetailsReturn": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "OK"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ScheduleDetailsMessage"
+          }
+        },
+        "availableBusinessDays": {
+          "type": "array",
+          "example": [
+            "2020-04-01",
+            "2020-04-02",
+            "2020-04-03",
+            "2020-04-04",
+            "2020-04-07"
+          ],
+          "items": {
+            "$ref": "#/definitions/ScheduleDetailsAvailableBusinessDay"
+          }
+        }
+      }
+    },
+    "ScheduleDetailsMessage": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "ScheduleDetailsAvailableBusinessDay": {
+      "type": "string",
+      "example": "2017-08-02"
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
