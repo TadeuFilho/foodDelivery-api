@@ -1,0 +1,8 @@
+{
+  "nome": "Sr Serigueijo Gourmet",
+  "taxaFrete": 10,
+  "cozinha": {
+    "id": 1,
+    "nome": "Tailandesa"
+  }
+}
