@@ -12,6 +12,7 @@ import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastroEstadoService {
@@ -30,10 +31,11 @@ public class CadastroEstadoService {
     public Optional<Estado> buscar(Long id) {
         return estadoRepository.findById(id);
     }
-
+    @Transactional
     public Estado salvar(Estado estado) {
         return estadoRepository.save(estado);
     }
+    @Transactional
     public void excluir(Long id) {
         try {
             estadoRepository.deleteById(id);

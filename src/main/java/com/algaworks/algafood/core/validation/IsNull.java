@@ -1,4 +1,4 @@
-package com.algaworks.algafood.coreValidation;
+package com.algaworks.algafood.core.validation;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;

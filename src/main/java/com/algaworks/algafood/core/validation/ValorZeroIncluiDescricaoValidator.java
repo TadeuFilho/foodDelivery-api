@@ -1,4 +1,4 @@
-package com.algaworks.algafood.coreValidation;
+package com.algaworks.algafood.core.validation;
 
 import java.math.BigDecimal;
 

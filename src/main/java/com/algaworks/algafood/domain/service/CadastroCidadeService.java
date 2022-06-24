@@ -14,6 +14,7 @@ import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastroCidadeService {
@@ -39,7 +40,7 @@ public class CadastroCidadeService {
     public Cidade atualizar(Cidade cidade) {
         return cidadeRepository.save(cidade);
     }
-
+    @Transactional
     public Cidade salvar(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
         Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
@@ -48,7 +49,7 @@ public class CadastroCidadeService {
         return cidadeRepository.save(cidade);
 
     }
-
+    @Transactional
     public void remover(Long id) {
         try {
             cidadeRepository.deleteById(id);
