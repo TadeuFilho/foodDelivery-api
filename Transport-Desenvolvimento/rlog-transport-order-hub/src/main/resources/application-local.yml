@@ -1,0 +1,41 @@
+spring:
+  data:
+    mongodb:
+      database: rlog-transport-order-hub
+      uri: mongodb://admin:sb75Gz73@mongodb-dev-oms.eastus.cloudapp.azure.com:27017/admin?socketTimeoutMS=30000&connectTimeoutMS=30000&waitQueueTimeoutMS=30000&maxIdleTimeMS=30000&wtimeoutMS=30000&readPreference=secondaryPreferred
+      #uri: mongodb://rlog:maZ*N87C8XHuqr@mongodb-headless.mongodb.svc.cluster.local:27017/admin?socketTimeoutMS=30000&connectTimeoutMS=30000&waitQueueTimeoutMS=30000&maxIdleTimeMS=30000&wtimeoutMS=30000&replicaSet=rs0
+  sleuth:
+    sampler:
+      probability: 1
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
+  metrics:
+    export:
+      influx:
+        api-version: v2
+        db: rlog-service-hml
+        uri: http://influxdb-rlog-hml.lojasrenner.com.br
+        step: 1m
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        exclude: loggers
+
+oms:
+  pagination-branch-size: 100
+  endpoint:
+    stock-api: http://stock-service.stock.svc.cluster.local:8080/v1/
+  elastic:
+    host: 10.100.200.140
+    port: 9200
+    username: elastic
+    password: OTFkNmRkYzM3
+    timeout: 10000
+
+cron:
+  days-to-clear: 7
+  hash: aHR0cDovL3Jsb2ctdHJhbnNwb3J0LW9yZGVyLXNlcnZpY2UucmxvZy5zdmMuY2x1c3Rlci5sb2NhbDo4MDgwL2FjdHVhdG9yL2hlYWx0aA==

@@ -1,0 +1,214 @@
+{
+  "id": {
+    "providerName": "admin",
+    "apiName": "RLOG-TRANSPORT-HUB-API",
+    "version": "v1"
+  },
+  "uuid": "92e48ac9-b6be-40c6-a116-f0b67ff285dc",
+  "description": "Documentação das API\u0027s do Transport Order Hub",
+  "type": "HTTP",
+  "context": "/supplyChainLogistics/transportationManagement/rlog/transportOrderHub/v1",
+  "contextTemplate": "/supplyChainLogistics/transportationManagement/rlog/transportOrderHub/{version}",
+  "tags": [
+    "RLOG-group"
+  ],
+  "documents": [],
+  "lastUpdated": "Mar 12, 2020 4:40:12 PM",
+  "availableTiers": [
+    {
+      "name": "Gold",
+      "displayName": "Gold",
+      "description": "Allows 5000 requests per minute",
+      "requestsPerMin": 5000,
+      "requestCount": 5000,
+      "unitTime": 1,
+      "timeUnit": "min",
+      "tierPlan": "FREE",
+      "stopOnQuotaReached": true
+    }
+  ],
+  "availableSubscriptionLevelPolicies": [],
+  "uriTemplates": [
+    {
+      "uriTemplate": "/v1/companies/{companyId}/broker/delivery/cart/query",
+      "httpVerb": "POST",
+      "authType": "Any",
+      "httpVerbs": [
+        "POST"
+      ],
+      "authTypes": [
+        "Any"
+      ],
+      "throttlingConditions": [],
+      "throttlingTier": "null",
+      "throttlingTiers": [
+        "null"
+      ],
+      "mediationScript": "null",
+      "scopes": [
+        null
+      ],
+      "mediationScripts": {}
+    },
+    {
+      "uriTemplate": "/v1/companies/{companyId}/broker/delivery/cart/fulfillment",
+      "httpVerb": "POST",
+      "authType": "Any",
+      "httpVerbs": [
+        "POST"
+      ],
+      "authTypes": [
+        "Any"
+      ],
+      "throttlingConditions": [],
+      "throttlingTier": "null",
+      "throttlingTiers": [
+        "null"
+      ],
+      "mediationScript": "null",
+      "scopes": [
+        null
+      ],
+      "mediationScripts": {}
+    },
+    {
+      "uriTemplate": "/v1/companies/{companyId}/broker/delivery/cart/query/{id}/pickup/options",
+      "httpVerb": "GET",
+      "authType": "Any",
+      "httpVerbs": [
+        "GET"
+      ],
+      "authTypes": [
+        "Any"
+      ],
+      "throttlingConditions": [],
+      "throttlingTier": "null",
+      "throttlingTiers": [
+        "null"
+      ],
+      "mediationScript": "null",
+      "scopes": [
+        null
+      ],
+      "mediationScripts": {}
+    },
+    {
+      "uriTemplate": "/v1/companies/{companyId}/broker/schedule/{cartId}/{deliveryModeId}/details",
+      "httpVerb": "GET",
+      "authType": "Any",
+      "httpVerbs": [
+        "GET"
+      ],
+      "authTypes": [
+        "Any"
+      ],
+      "throttlingConditions": [],
+      "throttlingTier": "null",
+      "throttlingTiers": [
+        "null"
+      ],
+      "mediationScript": "null",
+      "scopes": [
+        null
+      ],
+      "mediationScripts": {}
+    },
+    {
+      "uriTemplate": "/v1/companies/{companyId}/broker/delivery/cart/query/{id}",
+      "httpVerb": "GET",
+      "authType": "Any",
+      "httpVerbs": [
+        "GET"
+      ],
+      "authTypes": [
+        "Any"
+      ],
+      "throttlingConditions": [],
+      "throttlingTier": "null",
+      "throttlingTiers": [
+        "null"
+      ],
+      "mediationScript": "null",
+      "scopes": [
+        null
+      ],
+      "mediationScripts": {}
+    },
+    {
+      "uriTemplate": "/v1/companies/{companyId}/broker/liveConfig",
+      "httpVerbs": [
+        "GET",
+        "POST"
+      ],
+      "authTypes": [
+        "Any"
+      ],
+      "throttlingConditions": [],
+      "throttlingTier": "null",
+      "throttlingTiers": [
+        "null"
+      ],
+      "mediationScript": "null",
+      "scopes": [
+        null
+      ],
+      "mediationScripts": {}
+    }
+  ],
+  "apiHeaderChanged": false,
+  "apiResourcePatternsChanged": false,
+  "status": "CREATED",
+  "technicalOwner": "Douglas Correa",
+  "technicalOwnerEmail": "douglas.silva@lojasrenner.com.br",
+  "businessOwner": "Douglas Correa",
+  "businessOwnerEmail": "douglas.silva@lojasrenner.com.br",
+  "visibility": "public",
+  "endpointSecured": false,
+  "endpointAuthDigest": false,
+  "transports": "http,https",
+  "advertiseOnly": false,
+  "corsConfiguration": {
+    "corsConfigurationEnabled": true,
+    "accessControlAllowOrigins": [
+      "*"
+    ],
+    "accessControlAllowCredentials": false,
+    "accessControlAllowHeaders": [
+      "authorization",
+      "X-Authorization",
+      "Access-Control-Allow-Origin",
+      "Content-Type",
+      "SOAPAction",
+      "X-Application-Name",
+      "X-Current-Date",
+      "Cache-Control",
+      "X-Cache-Control"
+    ],
+    "accessControlAllowMethods": [
+      "GET",
+      "PUT",
+      "POST",
+      "DELETE",
+      "PATCH",
+      "OPTIONS"
+    ]
+  },
+  "endpointConfig": "{\"production_endpoints\":{\"url\":\"http://13.68.202.114/oms/rlog-transport-order-service\",\"config\":{\"suspendDuration\":\"0\",\"suspendMaxDuration\":\"0\",\"actionSelect\":\"fault\",\"actionDuration\":\"30000\"},\"template_not_supported\":false},\"endpoint_type\":\"http\"}",
+  "responseCache": "Disabled",
+  "cacheTimeout": 300,
+  "implementation": "ENDPOINT",
+  "scopes": [],
+  "isDefaultVersion": false,
+  "isPublishedDefaultVersion": false,
+  "environments": [
+    "Production and Sandbox"
+  ],
+  "createdTime": "1574707075116",
+  "additionalProperties": {},
+  "environmentList": [
+    "PRODUCTION"
+  ],
+  "accessControl": "all",
+  "rating": 0.0,
+  "isLatest": false
+}

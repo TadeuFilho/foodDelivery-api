@@ -1,4 +1,4 @@
-# RLOG-TRANSPORT-ORDER-SERVICE
+# RLOG-TRANSPORT-ORDER-HUB
 Projeto que tem por objetivo expor uma api para redirecionar os payloads recebidos aos endpoints cadastrados no sistema.
 
 # TECNOLOGIAS/LIBS

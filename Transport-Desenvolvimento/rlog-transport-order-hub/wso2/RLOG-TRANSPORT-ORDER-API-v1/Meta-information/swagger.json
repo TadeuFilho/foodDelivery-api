@@ -1,0 +1,179 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "rlog-transport-order-hub",
+    "description": "Renner Logistica - Envio para parceiros cadastrados",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "guilherme.castro@lojasrenner.com.br"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [
+    {
+      "url": "https://apiprda1.lojasrenner.com.br/Logistics/transportationManagement/rlog/transportOrderHub/1.0.0"
+    }
+  ],
+  "security": [
+    {
+      "default": [
+        "basic",
+        "apikey",
+        "oauth2"
+      ]
+    }
+  ],
+  "paths": {
+    "/v1/transportOrderHub/{partnerId}/{method}": {
+      "post": {
+        "tags": [
+          "Transport order Hub"
+        ],
+        "summary": "Envio de informação para parceiros cadastrados",
+        "description": "redirecionar os payloads recebidos aos endpoints cadastrados no sistema",
+        "operationId": "Postcreatehub",
+        "parameters": [
+          {
+            "name": "partnerId",
+            "in": "path",
+            "description": "Id da empresa",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "path",
+            "description": "método",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Objeto com os dados para ser enviado ao parceiro",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/TransportOrderHubRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransportOrderHubReturn"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados com problemas.",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro interno.",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/v1/saveData/{partnerId}/{method}": {
+      "post": {
+        "tags": [
+          "Transport order Hub"
+        ],
+        "summary": "Salvar informação de parceiros",
+        "description": "Salvar os payloads recebidos aos endpoints cadastrados no sistema",
+        "operationId": "PostsaveData",
+        "parameters": [
+          {
+            "name": "partnerId",
+            "in": "path",
+            "description": "Id da empresa",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "path",
+            "description": "método",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Objeto com os dados para ser salvo na base de dados",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/TransportOrderHubRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Operação realizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransportOrderHubReturn"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados com problemas.",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro interno.",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TransportOrderHubReturn": {
+        "type": "object"
+      },
+      "TransportOrderHubRequest": {
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "default": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://apiprda1.lojasrenner.com.br/authorize",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  }
+}

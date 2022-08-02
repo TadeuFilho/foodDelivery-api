@@ -1,0 +1,14 @@
+name: $(BUILD.BUILDID)
+
+variables:
+- template: build-variables.yml
+- group: RLOG-TRANSPORT-ORDER-HUB-RLOG-DEVOPS-CI
+
+resources:
+  repositories:
+    - repository: devops-ci
+      type: git
+      name: devops-ci
+
+stages:
+  - template: azure-pipelines-ms-template.yml@devops-ci

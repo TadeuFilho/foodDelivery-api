@@ -1,0 +1,14 @@
+name: $(BUILD.BUILDID)-rlog
+
+variables:
+- template: build-variables-rlog.yml
+- group: RLOG-TRANSPORT-ORDER-HUB-RLOG-DEVOPS-CI
+
+resources:
+  repositories:
+    - repository: rlog-devops-ci
+      type: git
+      name: rlog-devops-ci
+      
+stages:
+  - template: deploy/kubernetes/renner-logistica/templates/azure-pipelines-ms-template.yml@rlog-devops-ci
