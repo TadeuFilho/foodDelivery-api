@@ -1,27 +1,21 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.BeanUtils;
+import com.algaworks.algafood.api.assembler.EstadoAssembler;
+import com.algaworks.algafood.api.disassembler.EstadoDisassembler;
+import com.algaworks.algafood.api.model.EstadoModel;
+import com.algaworks.algafood.api.model.input.EstadoInput;
+import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
+import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.NegocioException;
+import com.algaworks.algafood.domain.model.Estado;
+import com.algaworks.algafood.domain.service.CadastroEstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.algaworks.algafood.domain.model.Estado;
-import com.algaworks.algafood.domain.service.CadastroEstadoService;
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/estados")
@@ -30,32 +24,45 @@ public class EstadoController {
     @Autowired
     private CadastroEstadoService cadastroEstadoService;
 
+    @Autowired
+    private EstadoAssembler estadoAssembler;
+
+    @Autowired
+    private EstadoDisassembler estadoDisassembler;
+
     @GetMapping
-    public List<Estado> listar() {
-        return cadastroEstadoService.listar();
+    public List<EstadoModel> listar() {
+        return estadoAssembler.toCollectionModel(cadastroEstadoService.listar());
     }
 
     @GetMapping("/{id}")
-    public Estado buscar(@PathVariable Long id) {
-        return cadastroEstadoService.buscarOuFalhar(id);
+    public EstadoModel buscar(@PathVariable Long id) {
+        Estado estado = cadastroEstadoService.buscarOuFalhar(id);
+        return estadoAssembler.toModel(estado);
 
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Estado adicionar(@RequestBody @Valid Estado estado) {
-        return cadastroEstadoService.salvar(estado);
-
+    public EstadoModel adicionar(@RequestBody @Valid EstadoInput estadoInput) {
+        try {
+        Estado estado = estadoDisassembler.toDomainObject(estadoInput);
+        return estadoAssembler.toModel(cadastroEstadoService.salvar(estado));
+    } catch (EntidadeNaoEncontradaException e) {
+        throw new NegocioException(e.getMessage());
     }
+}
 
     @PutMapping("/{id}")
-    public Estado atualizar(@PathVariable Long id, @RequestBody @Valid Estado estado) {
+    public EstadoModel atualizar(@PathVariable Long id, @RequestBody @Valid EstadoInput estadoInput) {
+        try {
+            Estado estadoAtual = cadastroEstadoService.buscarOuFalhar(id);
+            estadoDisassembler.copyToDomainObject(estadoInput,estadoAtual);
 
-        Estado estadoAtual = cadastroEstadoService.buscarOuFalhar(id);
-
-        BeanUtils.copyProperties(estado, estadoAtual, "id");
-        return cadastroEstadoService.salvar(estadoAtual);
-
+            return estadoAssembler.toModel(cadastroEstadoService.salvar(estadoAtual));
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

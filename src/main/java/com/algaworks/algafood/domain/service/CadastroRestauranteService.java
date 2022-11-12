@@ -1,18 +1,16 @@
 package com.algaworks.algafood.domain.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CadastroRestauranteService {
@@ -41,7 +39,6 @@ public class CadastroRestauranteService {
         return restauranteRepository.save(restaurante);
     }
 
-
     public Restaurante atualizar(Restaurante restaurante) {
         return restauranteRepository.save(restaurante);
     }
@@ -50,17 +47,5 @@ public class CadastroRestauranteService {
         return restauranteRepository.findById(restauranteId).orElseThrow(() ->
                 new RestauranteNaoEncontradoException(restauranteId));
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
