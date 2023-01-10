@@ -54,7 +54,6 @@ public class CozinhaController {
 
     }
 
-
     @PutMapping("/{cozinhaId}")
     public CozinhaModel atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaInput cozinhaInput) {
 
