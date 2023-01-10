@@ -57,7 +57,6 @@ public class RestauranteController {
 
     }
 
-
     @GetMapping("/{id}")
     public RestauranteModel buscar(@PathVariable Long id) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(id);
@@ -89,19 +88,6 @@ public class RestauranteController {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     private void validate(Restaurante restaurante, String objectName) {
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
         validator.validate(restaurante, bindingResult);
@@ -110,7 +96,6 @@ public class RestauranteController {
         }
 
     }
-
 
     private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino, HttpServletRequest request) {
         ServletServerHttpRequest serverHttpRequest = new ServletServerHttpRequest(request);
@@ -134,7 +119,16 @@ public class RestauranteController {
             throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
         }
     }
+    @PutMapping("/{restauranteId}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativar(@PathVariable Long restauranteId) {
+        cadastroRestaurante.ativar(restauranteId);
+    }
 
-
+    @DeleteMapping("/{restauranteId}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativar(@PathVariable Long restauranteId) {
+        cadastroRestaurante.inativar(restauranteId);
+    }
 
 }
