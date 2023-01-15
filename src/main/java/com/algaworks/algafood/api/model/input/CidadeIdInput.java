@@ -7,8 +7,9 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class CozinhaInput {
+public class CidadeIdInput {
 
     @NotNull
-    private String id;
+    private Long id;
+
 }
