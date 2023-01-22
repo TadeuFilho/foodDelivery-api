@@ -8,7 +8,6 @@ import com.algaworks.algafood.api.model.input.UsuarioInput;
 import com.algaworks.algafood.api.model.input.UsuarioSenhaAtualizarInput;
 import com.algaworks.algafood.domain.model.Usuario;
 
-import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +21,7 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private CadastroUsuarioService cadastroUsuario;
+    private CadastroUsuarioService cadastroUsuarioService;
 
     @Autowired
     private UsuarioAssembler usuarioModelAssembler;
@@ -35,14 +31,14 @@ public class UsuarioController {
 
     @GetMapping
     public List<UsuarioModel> listar() {
-        List<Usuario> todasUsuarios = usuarioRepository.findAll();
+        List<Usuario> todasUsuarios = cadastroUsuarioService.listar();
 
         return usuarioModelAssembler.toCollectionModel(todasUsuarios);
     }
 
     @GetMapping("/{usuarioId}")
     public UsuarioModel buscar(@PathVariable Long usuarioId) {
-        Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
+        Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
 
         return usuarioModelAssembler.toModel(usuario);
     }
@@ -51,7 +47,7 @@ public class UsuarioController {
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioModel adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
         Usuario usuario = usuarioInputDisassembler.toDomainObject(usuarioInput);
-        usuario = cadastroUsuario.salvar(usuario);
+        usuario = cadastroUsuarioService.salvar(usuario);
 
         return usuarioModelAssembler.toModel(usuario);
     }
@@ -59,9 +55,9 @@ public class UsuarioController {
     @PutMapping("/{usuarioId}")
     public UsuarioModel atualizar(@PathVariable Long usuarioId,
                                   @RequestBody @Valid UsuarioInput usuarioInput) {
-        Usuario usuarioAtual = cadastroUsuario.buscarOuFalhar(usuarioId);
+        Usuario usuarioAtual = cadastroUsuarioService.buscarOuFalhar(usuarioId);
         usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuarioAtual);
-        usuarioAtual = cadastroUsuario.salvar(usuarioAtual);
+        usuarioAtual = cadastroUsuarioService.salvar(usuarioAtual);
 
         return usuarioModelAssembler.toModel(usuarioAtual);
     }
@@ -69,6 +65,6 @@ public class UsuarioController {
     @PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioSenhaAtualizarInput senha) {
-        cadastroUsuario.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getNovaSenha());
+        cadastroUsuarioService.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getNovaSenha());
     }
 }

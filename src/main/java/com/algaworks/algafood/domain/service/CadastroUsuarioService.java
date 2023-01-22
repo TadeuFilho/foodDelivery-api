@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CadastroUsuarioService {
 
@@ -33,5 +35,9 @@ public class CadastroUsuarioService {
     public Usuario buscarOuFalhar(Long usuarioId) {
         return usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
+    }
+
+    public List<Usuario> listar() {
+        return usuarioRepository.findAll();
     }
 }
